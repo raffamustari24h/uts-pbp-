@@ -1,53 +1,46 @@
-const board = [
-  [".", ".", ".", ".", ".", ".", ".", "."],
-  [".", ".", ".", ".", ".", ".", ".", "."],
-  [".", ".", ".", ".", ".", ".", ".", "."],
-  [".", ".", ".", "R", ".", ".", ".", "."],
-  [".", ".", ".", ".", ".", ".", ".", "."],
-  [".", ".", ".", ".", "K", ".", ".", "."],
-  [".", ".", ".", ".", ".", ".", ".", "."],
-  [".", ".", ".", ".", ".", ".", ".", "."]
+let lahan = [
+  ["subur", "kering", "subur", "subur"],
+  ["subur", "kering", "kering", "kering"],
+  ["tandus", "subur", "subur", "subur"],
+  ["kering", "kering", "tandus", "tandus"]
 ];
 
-function cekRaja(board) {
-  let rookPos = null;
-  let kingPos = null;
-  
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      if (board[i][j] === "R") rookPos = [i, j];
-      if (board[i][j] === "K") kingPos = [i, j];
+let cuaca = {
+  suhu: 28,
+  kelembapan: 60,
+  angin: 10
+};
+
+for (let i = 0; i < lahan.length; i++) {
+  let baris = lahan[i];
+  let jumlahSubur = 0;
+  for (let j = 0; j < baris.length; j++) {
+    if (baris[j] === "subur") jumlahSubur++;
+  }
+  let persentaseSubur = (jumlahSubur / baris.length) * 100;
+  if (persentaseSubur < 50) {
+    for (let j = 0; j < baris.length; j++) {
+      lahan[i][j] = "kering";
     }
   }
-
-  if (!rookPos || !kingPos) {
-    console.log("Papan tidak valid!");
-    return;
-  }
-
-  const [rRow, rCol] = rookPos;
-  const [kRow, kCol] = kingPos;
-
-  if (rRow === kRow) {
-    const min = Math.min(rCol, kCol);
-    const max = Math.max(rCol, kCol);
-    for (let c = min + 1; c < max; c++) {
-      if (board[rRow][c] !== ".") return console.log("Aman");
-    }
-    return console.log("SKAK!");
-  }
-
-  if (rCol === kCol) {
-    const min = Math.min(rRow, kRow);
-    const max = Math.max(rRow, kRow);
-    for (let r = min + 1; r < max; r++) {
-      if (board[r][rCol] !== ".") return console.log("Aman");
-    }
-    return console.log("SKAK!");
-  }
-
-  console.log("Aman");
 }
 
-cekRaja(board);
+let totalSubur = 0;
+for (let i = 0; i < lahan.length; i++) {
+  for (let j = 0; j < lahan[i].length; j++) {
+    if (lahan[i][j] === "subur") totalSubur++;
+  }
+}
 
+let cuacaCocok =
+  cuaca.suhu >= 20 && cuaca.suhu <= 30 &&
+  cuaca.kelembapan > 50 &&
+  cuaca.angin < 15;
+
+let totalDitanami = cuacaCocok ? totalSubur : 0;
+
+console.log("=== HASIL PEMERIKSAAN PERKEBUNAN ===");
+console.log("Total petak subur:", totalSubur);
+console.log("Total petak yang ditanami:", totalDitanami);
+if (!cuacaCocok) console.log(" Cuaca tidak cocok untuk bercocok tanam!");
+else console.log("Cuaca cocok untuk bercocok tanam.");
