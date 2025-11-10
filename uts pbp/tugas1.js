@@ -1,47 +1,56 @@
-const useRNG = (n, j = 0) => Math.floor(Math.random() * n) + j;
-const field = Array.from({ length: 4 }, () => []);
-const fieldDataPossibility = ["subur", "kering", "tandus"];
-const weather = {};
+const board = [
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", "R", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", "K", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."]
+];
 
+function cekRaja(board) {
+  let rookPos = null;
+  let kingPos = null;
 
-for (let i = 0; i < 4; i++) {
-  for (let j = 0; j < 4; j++) {
-    field[i][j] = fieldDataPossibility[useRNG(3)];
+  // Cari posisi Benteng (R) dan Raja (K)
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (board[i][j] === "R") rookPos = [i, j];
+      if (board[i][j] === "K") kingPos = [i, j];
+    }
   }
+
+  if (!rookPos || !kingPos) {
+    console.log("Papan tidak valid!");
+    return;
+  }
+
+  const [rRow, rCol] = rookPos;
+  const [kRow, kCol] = kingPos;
+
+  // Cek horizontal
+  if (rRow === kRow) {
+    const min = Math.min(rCol, kCol);
+    const max = Math.max(rCol, kCol);
+    for (let c = min + 1; c < max; c++) {
+      if (board[rRow][c] !== ".") return console.log("Aman");
+    }
+    return console.log("SKAK!");
+  }
+
+  // Cek vertikal
+  if (rCol === kCol) {
+    const min = Math.min(rRow, kRow);
+    const max = Math.max(rRow, kRow);
+    for (let r = min + 1; r < max; r++) {
+      if (board[r][rCol] !== ".") return console.log("Aman");
+    }
+    return console.log("SKAK!");
+  }
+
+  console.log("Aman");
 }
 
-
-Object.assign(weather, {
-  temp: useRNG(20, 15),
-  humidity: useRNG(20, 40),
-  windSpeed: useRNG(10, 10),
-});
-
-
-let fertile = 0;
-
-field.forEach((row) => {
-  const fertileCount = row.filter((plot) => plot === "subur").length;
-  if (fertileCount >= 2) fertile += fertileCount;
-});
-
-
-const weatherLogic =
-  weather.temp >= 20 &&
-  weather.temp <= 30 &&
-  weather.humidity > 50 &&
-  weather.windSpeed < 15;
-
-
-console.log("Hasil perhitungan :");
-console.log(field);
-console.log(weather);
-console.log(`Total petak subur : ${fertile}`);
-console.log(
-  `Total petak ditanam : ${weatherLogic ? fertile : 0}`
-);
-console.log(
-  weatherLogic
-    ? "Cuaca cocok untuk bercocok bertanam"
-    : "Cuaca tidak cocok untuk bercocok bertanam"
-);
+// ✅ Panggil fungsi di sini
+cekRaja(board);
