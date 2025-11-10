@@ -12,8 +12,7 @@ const board = [
 function cekRaja(board) {
   let rookPos = null;
   let kingPos = null;
-
-  // Cari posisi Benteng (R) dan Raja (K)
+  
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       if (board[i][j] === "R") rookPos = [i, j];
@@ -29,7 +28,6 @@ function cekRaja(board) {
   const [rRow, rCol] = rookPos;
   const [kRow, kCol] = kingPos;
 
-  // Cek horizontal
   if (rRow === kRow) {
     const min = Math.min(rCol, kCol);
     const max = Math.max(rCol, kCol);
@@ -39,7 +37,6 @@ function cekRaja(board) {
     return console.log("SKAK!");
   }
 
-  // Cek vertikal
   if (rCol === kCol) {
     const min = Math.min(rRow, kRow);
     const max = Math.max(rRow, kRow);
@@ -52,5 +49,5 @@ function cekRaja(board) {
   console.log("Aman");
 }
 
-// ✅ Panggil fungsi di sini
 cekRaja(board);
+
